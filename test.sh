@@ -14,14 +14,14 @@ for app in $(seq 1 $no_of_apps); do
 	echo && echo "== application no. $app =="
 
 	for i in $(seq 1 $no_of_managers); do
+		echo && echo "= http on manager-$i ="
 		cmd="curl -sS http://$(docker-machine ip manager-$i)/apps/$i"
-		echo "$cmd | grep Hostname"
-		for t in $(seq 1 $tries); do $cmd | grep Hostname; done
-	done
+		echo "\$ $cmd"
+		for t in $(seq 1 $tries); do $cmd; done
 
-	for i in $(seq 1 $no_of_workers); do
-		cmd="curl -sS http://$(docker-machine ip worker-$i)/apps/$i"
-		echo "$cmd | grep Hostname"
-		for t in $(seq 1 $tries); do $cmd | grep Hostname; done
+		echo && echo "= https on manager-$i ="
+		cmd="curl -skS https://$(docker-machine ip manager-$i)/apps/$i"
+		echo "\$ $cmd"
+		for t in $(seq 1 $tries); do $cmd; done
 	done
 done
